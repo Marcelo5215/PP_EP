@@ -14,6 +14,7 @@ bool compare(long int first, long int second){
  */
 
 std::list<long int> getPrimos(int limite, int threads, char* op){
+	omp_set_num_threads(threads);
 	//soma dos numeros primos 
 	long int sum = 0;
 	long int i;

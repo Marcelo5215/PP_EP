@@ -11,7 +11,7 @@ _OBJ = prime.o main.o
 OBJ= $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.cpp $(DEPS)
-	$(CXX) -c -o $@ $< $(CXXFLAGS) 
+	$(CXX) -c -o $@ $< $(CXXFLAGS) $(LIBS)
 
 testEP1: $(OBJ)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
