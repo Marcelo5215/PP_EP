@@ -14,7 +14,7 @@ EP3 - Exercício 3
 ```
 ***TODO:***
 ```
-	- Implementar a junção das sublistas
+	- Pensar em uma forma melhor de algoritmo
 
 ```
 
