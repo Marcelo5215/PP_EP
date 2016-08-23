@@ -1,5 +1,8 @@
 #include "prime.h"
 
+double total_time = 0.0;
+long int sum = 0;
+
 //funcoes encapsuladas
 bool compare(long int first, long int second){ 
 	return ( first < second ); 
@@ -15,31 +18,30 @@ bool compare(long int first, long int second){
 
 std::list<long int> getPrimos(int limite, int threads, char* op){
 	omp_set_num_threads(threads);
+	struct timeval inicio, fim;
 	//soma dos numeros primos 
-	long int sum = 0;
 	long int i;
 	list<long int> primes;
 
 	//sublistas
 	std::vector< list<long int>  > sub(threads);
 
-	#pragma omp parallel for schedule(static, 1) private(i)
-	for(int num = 3; num <= limite; num++){
-		if (num % 2 == 0){
-			continue;
-		}
+	gettimeofday(&inicio, NULL); 
+
+	#pragma omp parallel for schedule(dynamic, 100) private(i) reduction(+:sum)
+	for(int num = 2; num <= limite; num++){
 
 		//checar se o numero(num) eh primo
-		for(i = 3; i < num/2+1; i++){
+		for(i = 2; i <= sqrt(num); i++){
 			if(num % i == 0){
 				break;
 			}
 		} //checa se achou um divisor diferente de 1 ou ele mesmo
-		if (i < num/2){
+		if (i <= sqrt(num)){
 			continue;
 		}
 		else{
-			//TODO - inserir o numero na lista da thread
+			sum = sum + num;
 			sub[omp_get_thread_num()].push_back(num);
 		}
 	}
@@ -49,12 +51,23 @@ std::list<long int> getPrimos(int limite, int threads, char* op){
 		primes.merge(sub[i], compare);
 	}
 
+	gettimeofday(&fim, NULL);
+	total_time = difftime(fim.tv_sec, inicio.tv_sec)+ (double) (fim.tv_usec - inicio.tv_usec)/1000000;
+
 	return primes;
 }
 
 void printList(std::list<long int> lista){
 	for (std::list<long int>::iterator i = lista.begin(); i != lista.end(); ++i){
-		cout << ' ' << *i;
+		cout << *i << ' ';
 	}
 	cout << endl;
+}
+
+void printTime(){
+	cout << total_time << endl;
+}
+
+void printSum(){
+	cout << sum << endl;
 }

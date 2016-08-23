@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
+#include <string.h>
 #include "prime.h"
 
 using namespace std;
@@ -14,7 +15,21 @@ int main(int argv, char** argc){
 
 	list<long int> primes = getPrimos(limit, threads, option);
 
-	printList(primes);
+	if(strcmp(argc[2], "list") == 0){
+		printList(primes);
+	}
+	else if(strcmp(argc[2], "time") == 0){
+		printTime();
+	}else if(strcmp(argc[2], "sum") == 0){
+		printSum();
+	}
+	else if(strcmp(argc[2], "all") == 0){
+		printList(primes);
+		printSum();
+		printTime();
+	}
+	
+
 
 	return 0;
 }
