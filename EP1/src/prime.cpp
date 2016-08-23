@@ -18,7 +18,7 @@ bool compare(long int first, long int second){
 
 std::list<long int> getPrimos(int limite, int threads, char* op){
 	omp_set_num_threads(threads);
-	struct timeval inicio, fim;
+	double inicio, fim;
 	//soma dos numeros primos 
 	long int i;
 	list<long int> primes;
@@ -26,7 +26,7 @@ std::list<long int> getPrimos(int limite, int threads, char* op){
 	//sublistas
 	std::vector< list<long int>  > sub(threads);
 
-	gettimeofday(&inicio, NULL); 
+	inicio= omp_get_wtime();
 
 	#pragma omp parallel for schedule(dynamic, 100) private(i) reduction(+:sum)
 	for(int num = 2; num <= limite; num++){
@@ -51,8 +51,8 @@ std::list<long int> getPrimos(int limite, int threads, char* op){
 		primes.merge(sub[i], compare);
 	}
 
-	gettimeofday(&fim, NULL);
-	total_time = difftime(fim.tv_sec, inicio.tv_sec)+ (double) (fim.tv_usec - inicio.tv_usec)/1000000;
+	fim=omp_get_wtime();
+	total_time = fim-inicio;
 
 	return primes;
 }
