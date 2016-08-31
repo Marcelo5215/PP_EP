@@ -40,11 +40,9 @@ std::list<long int> getPrimos(int limite, int threads){
 	//computa os primos restantes
 	#pragma omp parallel for schedule(dynamic,100) private(j) reduction(+:sum)
 	for(num=raiz+1;num<=limite;num++){	
-		//cout<<num2<<endl;
 		//checar se o numero(num) eh primo
 		j=primes.begin();
-		raiz2=sqrt(num)+1;
-		while(*j <= sqrt(num) || j==primes.end()){
+		while(*j <= sqrt(num) && j!=primes.end()){
 			if(num % *j == 0){
 				break;
 			}
