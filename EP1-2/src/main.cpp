@@ -9,6 +9,11 @@ using namespace std;
 int main(int argv, char** argc){
 	int limit, threads; //limit = limite max   threads = num de threads a executar o programa
 
+	if (argv != 4){
+		printf("Usage: ./testEp1 <limite> <op> <threads>\n");
+		return -1;
+	}
+
 	limit = atoi(argc[1]);
 	threads = atoi(argc[3]);
 

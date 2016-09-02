@@ -4,8 +4,8 @@ double total_time = 0.0;
 long int sum = 0;
 
 //funcoes encapsuladas
-bool compare(long int first, long int second){ 
-	return ( first < second ); 
+bool compare(long int first, long int second){
+	return ( first < second );
 }
 
 std::list<long int> getPrimos(int limite, int threads){
@@ -20,7 +20,7 @@ std::list<long int> getPrimos(int limite, int threads){
 
 	inicio= omp_get_wtime();
 
-	#pragma omp parallel for schedule(dynamic,100) private(i,j) reduction(+:sum)
+	#pragma omp parallel for schedule(guided) private(i,j) reduction(+:sum)
 	for(num=2;num<=raiz;num++){
 
 		//garante que a lista contenha pelo menos os primos menores ou iguais a raiz do limite
@@ -38,8 +38,8 @@ std::list<long int> getPrimos(int limite, int threads){
 	}
 	primes.sort();
 	//computa os primos restantes
-	#pragma omp parallel for schedule(dynamic,100) private(j) reduction(+:sum)
-	for(num=raiz+1;num<=limite;num++){	
+	#pragma omp parallel for schedule(guided) private(j) reduction(+:sum)
+	for(num=raiz+1;num<=limite;num++){
 		//checar se o numero(num) eh primo
 		j=primes.begin();
 		while(*j <= sqrt(num) && j!=primes.end()){
@@ -52,7 +52,7 @@ std::list<long int> getPrimos(int limite, int threads){
 			sum += num;
 			sub[omp_get_thread_num()].push_back(num);
 		}
-	}	
+	}
 	for(i = 0; i < threads; ++i){
 		primes.merge(sub[i], compare);
 	}
@@ -72,6 +72,7 @@ void printList(std::list<long int> lista){
 
 void printTime(){
 	cout << total_time << endl;
+	total_time = 0;
 }
 
 void printSum(){
