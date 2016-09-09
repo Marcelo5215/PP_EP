@@ -1,3 +1,5 @@
+// Recebe os parametros do programa e chama as funcoes necessarias.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
@@ -7,7 +9,7 @@
 using namespace std;
 
 int main(int argv, char** argc){
-	int limit, threads; //limit = limite max   threads = num de threads a executar o programa
+	int limit, threads; // limit = limite maximo; threads = numero de threads a executar o programa.
 
 	if (argv != 4){
 		printf("Usage: ./testEp1 <limite> <op> <threads>\n");
@@ -17,8 +19,14 @@ int main(int argv, char** argc){
 	limit = atoi(argc[1]);
 	threads = atoi(argc[3]);
 
+	// Chama a funcao que retorna a lista de primos do intervalo desejado.
 	list<long int> primes = getPrimos(limit, threads);
 
+	// Compara os parametros recebidos e executa as funcoes adequadas:
+	// "list" imprime a lista na tela;
+	// "time" imprime o tempo de execução na tela;
+	// "sum" imprime a soma de todos os primos da lista;
+	// "all" imprime todos os valores anteriores.
 	if(strcmp(argc[2], "list") == 0){
 		printList(primes);
 	}
@@ -32,6 +40,5 @@ int main(int argv, char** argc){
 		printSum();
 		printTime();
 	}
-
 	return 0;
 }

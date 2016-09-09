@@ -15,7 +15,7 @@
 
 	using namespace std;
 
-	//declaracao de funcoes
+	// Declaracao de funcoes.
 	std::list<long int> getPrimos(int limite, int threads);
 	void printList(std::list<long int> lista);
 	void printTime();
