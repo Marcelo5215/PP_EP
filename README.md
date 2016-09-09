@@ -2,6 +2,7 @@
 Exercícios de Programação de Programação Paralela - 2/2016  
 
 EP1 - Exercício 1  
+---->	EP1-FINAL
 EP2 - Exercício 2  
 EP3 - Exercício 3  
 
@@ -14,7 +15,7 @@ EP3 - Exercício 3
 ```
 ***TODO:***
 ```
-	- Pensar em uma forma melhor de algoritmo
+	- Começar o segundo exercício em EP2
 
 ```
 
