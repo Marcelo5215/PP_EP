@@ -1,8 +1,8 @@
 CXX = g++
-CXXFLAGS = -I$(IDIR)
+CXXFLAGS = -I$(IDIR) -g
 IDIR = ../include
 ODIR = ../obj
-LIBS = -lpthreads
+LIBS = -lpthread -lm
 
 _DEPS = ocean.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
@@ -13,7 +13,7 @@ OBJ= $(patsubst %,$(ODIR)/%,$(_OBJ))
 $(ODIR)/%.o: %.cpp $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS) $(LIBS)
 
-testEP1: $(OBJ)
+testEP2: $(OBJ)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 .PHONY: clean

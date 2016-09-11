@@ -13,13 +13,14 @@
 	#include <sys/time.h>
 	#include <time.h>
 
+	#define BORDER  0//0x70000
+
 	using namespace std;
 
 	//declaracao de funcoes
-	std::list<long int> getPrimos(int limite, int threads);
-	void printList(std::list<long int> lista);
-	void printTime();
-	void printSum();
-
+	std::vector<std::vector<int> > oceanSimSERIAL(int rows, int cols, int interation_limit, int threads);
+	std::vector<std::vector<int> > getOceanFromSTDIN(int rows, int cols);
+	int getMaxNeighborValue(vector< vector<int> > ocean,int i, int j, int rows, int cols);
+	void printOcean(vector<vector<int> > ocean, int rows, int cols);
 
 #endif
