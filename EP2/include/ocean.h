@@ -18,9 +18,14 @@
 	using namespace std;
 
 	//declaracao de funcoes
-	std::vector<std::vector<int> > oceanSimSERIAL(int rows, int cols, int interation_limit, int threads);
-	std::vector<std::vector<int> > getOceanFromSTDIN(int rows, int cols);
-	int getMaxNeighborValue(vector< vector<int> > ocean,int i, int j, int rows, int cols);
-	void printOcean(vector<vector<int> > ocean, int rows, int cols);
+	int** oceanSimSERIAL(int rows, int cols, int interation_limit, int threads);
+	int** getOceanFromSTDIN(int rows, int cols);
+	int getMaxNeighborValue(int** ocean,int i, int j, int rows, int cols);
+	void printOcean(int** ocean, int rows, int cols);
+	void copyTo(int** in, int** &out, int rows, int cols);
+
+
+	int** newMAT(int rows, int cols);
+	void freeMAT(int** mat, int rows, int cols);
 
 #endif

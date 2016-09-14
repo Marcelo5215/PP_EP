@@ -20,11 +20,13 @@ int main(int argv, char** argc){
 	interation_limit = atoi(argc[3]);
 	threads = atoi(argc[4]);
 
-	std::vector<std::vector<int> > ocean;
+	int** ocean;
 
 	ocean = oceanSimSERIAL(rows, cols, interation_limit, threads);
 	printf("====\n");
 	printOcean(ocean, rows, cols);
+
+	freeMAT(ocean, rows, cols);
 
 	return 0;
 }
