@@ -15,16 +15,17 @@ int** simulation(int rows, int cols, int interation_limit, int thread_count){
 	ocean.in = getOceanFromSTDIN(rows, cols);
 	ocean.out = newMAT(rows,cols);
 
+	if(threads>rows*cols)threads=rows*cols;	
 	if(threads==1){
 		oceanSimSERIAL(interation_limit);
 	}
 	else{
-		thread_handles= (pthread_t*) malloc(thread_count*sizeof(pthread_t));
+		thread_handles= (pthread_t*) malloc(threads*sizeof(pthread_t));
 		for(int i=0; i<interation_limit; i++){
-			for (thread= 0; thread < thread_count; thread++){
+			for (thread= 0; thread < threads; thread++){
 				pthread_create(&thread_handles[thread] ,NULL, oceanSimPARALLEL, (void*) thread);
 			}
-			for (thread= 0; thread < thread_count; thread++){
+			for (thread= 0; thread < threads; thread++){
 				pthread_join(thread_handles[thread], NULL);
 			}
 			copyTo(ocean.out, ocean.in, ocean.rows, ocean.cols);
