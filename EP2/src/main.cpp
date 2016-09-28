@@ -22,9 +22,16 @@ int main(int argv, char** argc){
 
 	int** ocean;
 
-	ocean = oceanSimSERIAL(rows, cols, interation_limit, threads);
+	ocean = oceanSimSERIAL(rows, cols, interation_limit);
 	printf("====\n");
 	printOcean(ocean, rows, cols);
+
+	printf("====\nNEW OCEAN FOR PARALLEL:", );
+
+	ocean = oceanSimParallelL(rows, cols, interation_limit, threads);
+	printf("====\n");
+	printOcean(ocean, rows, cols);
+
 
 	freeMAT(ocean, rows, cols);
 

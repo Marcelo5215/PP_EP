@@ -4,8 +4,12 @@ using namespace std;
 
 int threads=1;
 oc ocean;
+double my_time;
 
 int** simulation(int rows, int cols, int interation_limit, int thread_count){
+	my_time = 0.0;
+	struct timeval start, end;
+
 	long thread;
 	pthread_t *thread_handles;
 
@@ -14,6 +18,8 @@ int** simulation(int rows, int cols, int interation_limit, int thread_count){
 	ocean.cols=cols;
 	ocean.in = getOceanFromSTDIN(rows, cols);
 	ocean.out = newMAT(rows,cols);
+
+	gettimeofday(&start, NULL);
 
 	if(threads==1){
 		oceanSimSERIAL(interation_limit);
@@ -32,6 +38,11 @@ int** simulation(int rows, int cols, int interation_limit, int thread_count){
 		free (thread_handles);
 	}
 	freeMAT(ocean.in, ocean.rows, ocean.cols);
+
+
+	gettimeofday(&end, NULL);
+
+	my_time = ((end.tv_sec*1000000+end.tv_usec) - (start.tv_sec*1000000+start.tv_usec));
 
 	return ocean.out;
 }
@@ -134,12 +145,49 @@ void printOcean(int** ocean, int rows, int cols){
 
 }
 
+void printTime(){
+	cout << my_time << endl;
+}
+
 void copyTo(int** in, int** &out, int rows, int cols){
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			out[i][j] = in[i][j];
 		}
 	}
+}
+
+int** getOceanFromFILE(char* filename, int rows, int cols){
+  int num=1, i=0, j=0;
+
+  FILE* fp = fopen(filename, "r");
+  char* string = (char*)malloc(sizeof(char)*cols*2);
+	char * pch;
+
+  //aloca uma nova matriz
+  static int** ocean = (int**)malloc(sizeof(int*) * rows);
+
+  for (int i = 0; i < rows; i++) {
+      ocean[i] = (int*)malloc(sizeof(int) * cols);
+  }
+
+  //adquire os valores do arquivo
+	while (fscanf(fp, "%[^\n]", string) > 0) {
+		j = 0;
+		pch = strtok (string," ,.-");
+		while (pch != NULL)
+		{
+			num = atoi(pch);
+			ocean[i][j] = num;
+			j++;
+			pch = strtok (NULL, " ,.-");
+		}
+		i++;
+	}
+
+  free(string);
+
+  return ocean;
 }
 
 /*==========================================*

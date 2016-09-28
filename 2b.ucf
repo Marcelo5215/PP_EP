@@ -1,0 +1,15 @@
+#ENTRADA
+NET "A<0>" LOC = "P11" #SW0;
+NET "A<1>" LOC = "L3" #SW1;
+NET "A<2>" LOC = "K3" #SW2;
+NET "A<3>" LOC = "B4" #SW3;
+
+#SAIDA DOS 4 BITS MENOS SIGNIFICATIVOS DE Y
+NET "Y<8>" LOC = "M5" #LD0;
+NET "Y<9>" LOC = "M11" #LD1;
+NET "Y<10>" LOC = "P7" #LD2;
+NET "Y<11>" LOC = "P6" #LD3;
+NET "Y<12>" LOC = "N5" #LD4;
+NET "Y<13>" LOC = "N4" #LD5;
+NET "Y<14>" LOC = "P4" #LD6;
+NET "Y<15>" LOC = "G1" #LD7;
