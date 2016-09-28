@@ -16,7 +16,7 @@ int** simulation(int rows, int cols, int interation_limit, int thread_count){
 	threads=thread_count;
 	ocean.rows=rows;
 	ocean.cols=cols;
-	ocean.in = getOceanFromSTDIN(rows, cols);
+	ocean.in = getOceanFromFILE("test.txt", rows, cols);
 	ocean.out = newMAT(rows,cols);
 
 	gettimeofday(&start, NULL);
@@ -161,7 +161,7 @@ int** getOceanFromFILE(char* filename, int rows, int cols){
   int num=1, i=0, j=0;
 
   FILE* fp = fopen(filename, "r");
-  char* string = (char*)malloc(sizeof(char)*cols*2);
+  char* string = (char*)malloc(sizeof(char)*cols*4);
 	char * pch;
 
   //aloca uma nova matriz
