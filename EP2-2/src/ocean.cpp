@@ -16,7 +16,7 @@ int** simulation(int rows, int cols, int interation_limit, int thread_count){
 	threads=thread_count;
 	ocean.rows=rows;
 	ocean.cols=cols;
-	ocean.in = getOceanFromFILE("test.txt", rows, cols);
+	ocean.in = getOceanFromSTDIN(rows, cols);
 	ocean.out = newMAT(rows,cols);
 
 	gettimeofday(&start, NULL);
@@ -105,6 +105,9 @@ int getMaxNeighborValue(int** ocean,int i, int j, int rows, int cols){
 			}
 		}
 	}
+	if (max < 1) {
+		return 1;
+	}
 
 	return max;
 }
@@ -158,6 +161,7 @@ void copyTo(int** in, int** &out, int rows, int cols){
 }
 
 int** getOceanFromFILE(char* filename, int rows, int cols){
+
   int num=1, i=0, j=0;
 
   FILE* fp = fopen(filename, "r");
@@ -183,6 +187,7 @@ int** getOceanFromFILE(char* filename, int rows, int cols){
 			pch = strtok (NULL, " ,.-");
 		}
 		i++;
+		fgetc(fp);
 	}
 
   free(string);
