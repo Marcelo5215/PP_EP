@@ -2,19 +2,19 @@
 
 using namespace std;
 
-void calcStep(int my_rank, int** ocean, int rows,int cols, int ranks){
+void calcStep(int my_rank, int* ocean, int rows,int cols, int ranks){
 	int my_first, my_last, tam, i, j;
-	long my_rank = (long ) rank;
 
 	tam=(rows*cols)/ranks;
 	my_first=(tam*(my_rank-1));
 	if(my_rank!=ranks-1){
-		my_last=(tam*(my_rank+1));
+		my_last=(tam*(my_rank));
 	}
 	else{
-		my_last=(ocean.rows*ocean.cols);
+		my_last=(rows*cols);
 	}
 	for (int k = my_first; k < my_last; k++) {
+		printf("oi from %d\n", my_rank);
 		i=k/cols;
 		j=k%cols;
 		ocean[i*cols + j] = ( getMaxNeighborValue(ocean , i, j, rows, cols) - 1);
@@ -83,7 +83,8 @@ void printOcean(int** ocean, int rows, int cols){
 }
 
 void printTime(){
-	cout << my_time << endl;
+	cout << "Tempo nao implementado" << endl;
+	//cout << my_time << endl;
 }
 
 void copyTo(int** in, int** &out, int rows, int cols){
@@ -125,6 +126,7 @@ int** getOceanFromFILE(char* filename, int rows, int cols){
 	}
 
   free(string);
+	fclose(fp);
 
   return ocean;
 }
@@ -153,12 +155,12 @@ void mat2vec(int** mat, int rows, int cols, int* vout){
 	}
 }
 
-void vec2mat(int* vin, int rows, cols, int** mat){
+void vec2mat(int* vin, int rows, int cols, int** mat){
 	mat = (int**)malloc(sizeof(int*)*rows);
 	for (int i = 0; i < rows; i++) {
 		mat[i] = (int*)malloc(sizeof(int)*cols);
 		for (int j = 0; j < cols; j++) {
-			mat[i][j] = vout[i*cols+j];
+			mat[i][j] = vin[i*cols+j];
 		}
 	}
 }

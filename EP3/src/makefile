@@ -1,4 +1,4 @@
-CXX = g++
+CXX = mpicxx
 CXXFLAGS = -I$(IDIR) -g
 IDIR = ../include
 ODIR = ../obj
@@ -13,7 +13,7 @@ OBJ= $(patsubst %,$(ODIR)/%,$(_OBJ))
 $(ODIR)/%.o: %.cpp $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS) $(LIBS)
 
-testEP2: $(OBJ)
+testEP3: $(OBJ)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 .PHONY: clean

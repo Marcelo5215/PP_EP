@@ -25,12 +25,11 @@
 		int cols;
 	} oc;
 
-	int rows_global, cols_global;
-
 	//declaracao de funcoes
+	void calcStep(int my_rank, int* ocean, int rows,int cols, int ranks);
 	void oceanSimSERIAL(int interation_limit);
 	int** getOceanFromSTDIN(int rows, int cols);
-	int getMaxNeighborValue(int** ocean,int i, int j, int rows, int cols);
+	int getMaxNeighborValue(int* ocean,int i, int j, int rows, int cols);
 	void printOcean(int** ocean, int rows, int cols);
 	void printTime();
 	void copyTo(int** in, int** &out, int rows, int cols);
@@ -39,7 +38,7 @@
 
 	int** newMAT(int rows, int cols);
 	void freeMAT(int** mat, int rows, int cols);
-	void vec2mat(int* vin, int rows, cols, int** mat);
+	void vec2mat(int* vin, int rows, int cols, int** mat);
 	void mat2vec(int** mat, int rows, int cols, int* vout);
 
 #endif
