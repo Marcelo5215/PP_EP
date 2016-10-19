@@ -2,10 +2,10 @@
 
 using namespace std;
 
-void calcStep(int my_rank, int* ocean, int rows,int cols, int ranks){
-	int my_first, my_last, tam, i, j;
+int* calcStep(int my_rank, int* ocean, int rows,int cols, int ranks){
+	int my_first, my_last, tam, i, j, *oceanaux=(int*)malloc(sizeof(int)*rows*cols);
 
-	tam=(rows*cols)/ranks;
+	tam=(rows*cols)/(ranks);
 	my_first=(tam*(my_rank-1));
 	if(my_rank!=ranks-1){
 		my_last=(tam*(my_rank));
@@ -14,11 +14,11 @@ void calcStep(int my_rank, int* ocean, int rows,int cols, int ranks){
 		my_last=(rows*cols);
 	}
 	for (int k = my_first; k < my_last; k++) {
-		printf("oi from %d\n", my_rank);
 		i=k/cols;
 		j=k%cols;
-		ocean[i*cols + j] = ( getMaxNeighborValue(ocean , i, j, rows, cols) - 1);
+		oceanaux[k] = ( getMaxNeighborValue(ocean , i, j, rows, cols) - 1);
 	}
+	return oceanaux;
 }
 
 
@@ -27,22 +27,19 @@ int getMaxNeighborValue(int* ocean,int i, int j, int rows, int cols){
 	int max = -1;
 
 	for (int k = i-1; k <= i+1; k++) {
-		if (k < 0 || k >= rows) {
-			continue;
-		}
-		for (int l = j-1; l <= j+1; l++) {
-			if (l < 0 || l >= cols ) {
-				continue;
+		if (k > 0 && k < rows) {
+			for (int l = j-1; l <= j+1; l++) {
+				if (l > 0 && l < cols ) {
+					if(ocean[k*cols + l] > max){
+						max = ocean[k*cols + l];
+					}
+				}	
 			}
-			else if(ocean[k*cols + l] > max){
-				max = ocean[k*cols + l];
-			}
-		}
+		}	
 	}
 	if (max < 1) {
 		return 1;
 	}
-
 	return max;
 }
 
@@ -146,13 +143,14 @@ int** newMAT(int rows, int cols){
 	return mat;
 }
 
-void mat2vec(int** mat, int rows, int cols, int* vout){
-	vout = (int*)malloc(sizeof(int)*rows*cols);
+int* mat2vec(int** mat, int rows, int cols){
+	int *vout = (int*)malloc(sizeof(int)*rows*cols);
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			vout[i*cols+j] = mat[i][j];
 		}
 	}
+	return vout;
 }
 
 void vec2mat(int* vin, int rows, int cols, int** mat){

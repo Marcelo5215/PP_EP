@@ -2,7 +2,7 @@ CXX = mpicxx
 CXXFLAGS = -I$(IDIR) -g
 IDIR = ../include
 ODIR = ../obj
-LIBS = -lpthread -lm
+LIBS = -lm
 
 _DEPS = ocean.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
