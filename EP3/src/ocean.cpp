@@ -5,19 +5,20 @@ using namespace std;
 int* calcStep(int my_rank, int* ocean, int rows,int cols, int ranks){
 	int my_first, my_last, tam, i, j, *oceanaux=(int*)malloc(sizeof(int)*rows*cols);
 
-	tam=(rows*cols)/(ranks);
+	tam=(rows*cols)/(ranks-1);
 	my_first=(tam*(my_rank-1));
 	if(my_rank!=ranks-1){
-		my_last=(tam*(my_rank));
+		my_last=(tam*(my_rank)-1);
 	}
 	else{
-		my_last=(rows*cols);
+		my_last=(rows*cols)-1;
 	}
-	for (int k = my_first; k < my_last; k++) {
+	for (int k = my_first; k <= my_last; k++) {
 		i=k/cols;
 		j=k%cols;
 		oceanaux[k] = ( getMaxNeighborValue(ocean , i, j, rows, cols) - 1);
 	}
+
 	return oceanaux;
 }
 
@@ -68,22 +69,22 @@ int** getOceanFromSTDIN(int rows, int cols){
 }
 
 //imprime a matriz na tela
-void printOcean(int** ocean, int rows, int cols){
+void printOcean(int* ocean, int rows, int cols){
 
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			cout << ocean[i][j] << " " ;
+			cout << ocean[i*cols +j] << " " ;
 		}
 		cout << endl;
 	}
 
 }
 
-void printTime(){
+/*void printTime(){
 	cout << "Tempo nao implementado" << endl;
 	//cout << my_time << endl;
 }
-
+*/
 void copyTo(int** in, int** &out, int rows, int cols){
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
@@ -92,7 +93,7 @@ void copyTo(int** in, int** &out, int rows, int cols){
 	}
 }
 
-int** getOceanFromFILE(char* filename, int rows, int cols){
+int* getOceanFromFILE(char* filename, int rows, int cols){
 
   int num=1, i=0, j=0;
 
@@ -101,11 +102,7 @@ int** getOceanFromFILE(char* filename, int rows, int cols){
 	char * pch;
 
   //aloca uma nova matriz
-  static int** ocean = (int**)malloc(sizeof(int*) * rows);
-
-  for (int i = 0; i < rows; i++) {
-      ocean[i] = (int*)malloc(sizeof(int) * cols);
-  }
+  static int* ocean = (int*)malloc(sizeof(int) * rows * cols);
 
   //adquire os valores do arquivo
 	while (fscanf(fp, "%[^\n]", string) > 0) {
@@ -114,7 +111,7 @@ int** getOceanFromFILE(char* filename, int rows, int cols){
 		while (pch != NULL)
 		{
 			num = atoi(pch);
-			ocean[i][j] = num;
+			ocean[i*cols+j] = num;
 			j++;
 			pch = strtok (NULL, " ,.-");
 		}

@@ -30,10 +30,9 @@
 	void oceanSimSERIAL(int interation_limit);
 	int** getOceanFromSTDIN(int rows, int cols);
 	int getMaxNeighborValue(int* ocean,int i, int j, int rows, int cols);
-	void printOcean(int** ocean, int rows, int cols);
-	void printTime();
+	void printOcean(int* ocean, int rows, int cols);
 	void copyTo(int** in, int** &out, int rows, int cols);
-	int** getOceanFromFILE(char* filename, int rows, int cols);
+	int* getOceanFromFILE(char* filename, int rows, int cols);
 
 
 	int** newMAT(int rows, int cols);
