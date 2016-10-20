@@ -50,13 +50,13 @@ int main(int argv, char** argc){
 					oceanvec[m*cols+l] = oceanvec2[m*cols + l];
 				}
 			}
-			if(i<interation_limit){
+			if(i<interation_limit-1){
 				for(int j=1; j<process_count; j++){
 					MPI_Send(&oceanvec[0], rows*cols, MPI_INT, j, 0, MPI_COMM_WORLD);
 				}
-			}	
+			}
 		}
-	}	
+	}
 
 	finish = MPI_Wtime(); 
 

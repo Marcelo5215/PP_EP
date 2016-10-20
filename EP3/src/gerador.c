@@ -9,9 +9,9 @@ int main(int argv, char** argc){
   for(i =0 ; i < atoi(argc[1]) ; i++){
       for(j =0 ; j < atoi(argc[1]) ; j++){
         fprintf(fp, "%d", rand()%atoi(argc[1])+1);
-        if (j < 999) {
+        //if (j < 999) {
           fprintf(fp, " ");
-        }
+        //}
       }
       fprintf(fp, "\n");
   }

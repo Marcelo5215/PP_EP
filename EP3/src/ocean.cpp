@@ -18,7 +18,6 @@ int* calcStep(int my_rank, int* ocean, int rows,int cols, int ranks){
 		j=k%cols;
 		oceanaux[k] = ( getMaxNeighborValue(ocean , i, j, rows, cols) - 1);
 	}
-
 	return oceanaux;
 }
 
@@ -98,7 +97,7 @@ int* getOceanFromFILE(char* filename, int rows, int cols){
   int num=1, i=0, j=0;
 
   FILE* fp = fopen(filename, "r");
-  char* string = (char*)malloc(sizeof(char)*cols*4);
+  char* string = (char*)malloc(sizeof(char)*cols*rows);
 	char * pch;
 
   //aloca uma nova matriz
