@@ -2,9 +2,14 @@
 
 using namespace std;
 
+
+/*
+ * A funcao calcStep realizara a simulacao dentro dos limites de cada processo
+ */
 void calcStep(int my_rank, int* ocean, int rows,int cols, int ranks, int *oceanaux){
 	int my_first, my_last, tam,i,j;
 
+	//calculo dos limites
 	tam=(rows*cols)/(ranks-1);
 	my_first=(tam*(my_rank-1));
 	if(my_rank!=ranks-1){
@@ -14,6 +19,8 @@ void calcStep(int my_rank, int* ocean, int rows,int cols, int ranks, int *oceana
 		my_last=(rows*cols)-1;
 	}
 	oceanaux=(int*)realloc(oceanaux,sizeof(int)*(my_last-my_first+1));
+
+	//simulacao
 	for (int k = my_first; k <= my_last; k++) {
 		i=k/cols;
 		j=k%cols;
@@ -26,6 +33,7 @@ void calcStep(int my_rank, int* ocean, int rows,int cols, int ranks, int *oceana
 int getMaxNeighborValue(int* ocean,int i, int j, int rows, int cols){
 	int max = -1;
 
+	//verifica os vizinhos da coordenada i, j
 	for (int k = i-1; k <= i+1; k++) {
 		if (k >= 0 && k < rows) {
 			for (int l = j-1; l <= j+1; l++) {
@@ -42,6 +50,8 @@ int getMaxNeighborValue(int* ocean,int i, int j, int rows, int cols){
 	}
 	return max;
 }
+
+
 
 int** getOceanFromSTDIN(int rows, int cols){
 	int num=1, i=0, j=0;
@@ -77,19 +87,6 @@ void printOcean(int* ocean, int rows, int cols){
 		cout << endl;
 	}
 
-}
-
-/*void printTime(){
-	cout << "Tempo nao implementado" << endl;
-	//cout << my_time << endl;
-}
-*/
-void copyTo(int** in, int** &out, int rows, int cols){
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			out[i][j] = in[i][j];
-		}
-	}
 }
 
 void getOceanFromFILE(char* filename, int rows, int cols, int *ocean){
