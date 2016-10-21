@@ -5,7 +5,7 @@
 #include "ocean.h"
 
 int main(int argv, char** argc){
-	int process_count, my_rank, *oceanvec, *oceanvec2, rows, cols, interation_limit,
+	int process_count, my_rank, *oceanvec2, rows, cols, interation_limit,
 		my_first, my_last, tam, i ,m ,l;
 	double start=0, finish=0;	
 
@@ -18,15 +18,13 @@ int main(int argv, char** argc){
 	MPI_Comm_size(MPI_COMM_WORLD, &process_count);
 	MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
-	start = MPI_Wtime(); 
-
 	rows = atoi(argc[1]);
 	cols = atoi(argc[2]);
 	interation_limit = atoi(argc[3]);
+	int* oceanvec = (int*)malloc(sizeof(int) * rows * cols);
+	getOceanFromFILE("mat.txt", rows, cols, oceanvec);
 
-	oceanvec = getOceanFromFILE("mat.txt", rows, cols);
-	oceanvec2=(int*)malloc(sizeof(int)*rows*cols);
-
+	start = MPI_Wtime(); 
 	for(i=0; i<interation_limit; i++){
 		if (my_rank!=0){
 			if(i>0)MPI_Recv(&oceanvec[0], rows*cols, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -34,8 +32,12 @@ int main(int argv, char** argc){
 			MPI_Send(&oceanvec2[0], rows*cols, MPI_INT, 0, 0, MPI_COMM_WORLD);
 		}
 		else{
+			if(i<interation_limit && i>0){
+				for(int j=1; j<process_count; j++){
+					MPI_Send(&oceanvec[0], rows*cols, MPI_INT, j, 0, MPI_COMM_WORLD);
+				}
+			}	
 			for(int j=1;j<process_count; j++){
-				MPI_Recv(&oceanvec2[0], rows*cols, MPI_INT, j, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				tam=(rows*cols)/(process_count-1);
 				my_first=(tam*(j-1));
 				if(j!=process_count-1){
@@ -44,15 +46,12 @@ int main(int argv, char** argc){
 				else{
 					my_last=(rows*cols);
 				}
+				int *oceanvec2 =(int*)malloc(sizeof(int)*(my_last-my_first+1));
+				MPI_Recv(&oceanvec2[0], rows*cols, MPI_INT, j, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				for (int k = my_first; k < my_last; k++) {
 					m=k/cols;
 					l=k%cols;
-					oceanvec[m*cols+l] = oceanvec2[m*cols + l];
-				}
-			}
-			if(i<interation_limit-1){
-				for(int j=1; j<process_count; j++){
-					MPI_Send(&oceanvec[0], rows*cols, MPI_INT, j, 0, MPI_COMM_WORLD);
+					oceanvec[m*cols+l] = oceanvec2[k-my_first];
 				}
 			}
 		}
@@ -76,7 +75,6 @@ int main(int argv, char** argc){
 		}
 	}	
 
-	free(oceanvec);
 	MPI_Finalize();
 	return 0;
 }

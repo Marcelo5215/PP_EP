@@ -13,12 +13,13 @@ int* calcStep(int my_rank, int* ocean, int rows,int cols, int ranks){
 	else{
 		my_last=(rows*cols)-1;
 	}
+	oceanaux=(int*)malloc(sizeof(int)*(my_last-my_first+1));
 	for (int k = my_first; k <= my_last; k++) {
 		i=k/cols;
 		j=k%cols;
-		oceanaux[k] = ( getMaxNeighborValue(ocean , i, j, rows, cols) - 1);
+		oceanaux[k-my_first] = ( getMaxNeighborValue(ocean , i, j, rows, cols) - 1);
 	}
-	return oceanaux;
+	return &oceanaux[0];
 }
 
 
@@ -27,9 +28,9 @@ int getMaxNeighborValue(int* ocean,int i, int j, int rows, int cols){
 	int max = -1;
 
 	for (int k = i-1; k <= i+1; k++) {
-		if (k > 0 && k < rows) {
+		if (k >= 0 && k < rows) {
 			for (int l = j-1; l <= j+1; l++) {
-				if (l > 0 && l < cols ) {
+				if (l >= 0 && l < cols ) {
 					if(ocean[k*cols + l] > max){
 						max = ocean[k*cols + l];
 					}
@@ -92,16 +93,13 @@ void copyTo(int** in, int** &out, int rows, int cols){
 	}
 }
 
-int* getOceanFromFILE(char* filename, int rows, int cols){
+void getOceanFromFILE(char* filename, int rows, int cols, int *ocean){
 
   int num=1, i=0, j=0;
 
   FILE* fp = fopen(filename, "r");
   char* string = (char*)malloc(sizeof(char)*cols*rows);
 	char * pch;
-
-  //aloca uma nova matriz
-  static int* ocean = (int*)malloc(sizeof(int) * rows * cols);
 
   //adquire os valores do arquivo
 	while (fscanf(fp, "%[^\n]", string) > 0) {
@@ -120,8 +118,6 @@ int* getOceanFromFILE(char* filename, int rows, int cols){
 
   free(string);
 	fclose(fp);
-
-  return ocean;
 }
 
 /*==========================================*
