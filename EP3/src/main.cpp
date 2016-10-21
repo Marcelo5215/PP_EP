@@ -92,14 +92,14 @@ int main(int argv, char** argc){
 	finish = MPI_Wtime(); 
 
 	if(my_rank==0){
-		if(strcmp(argc[5], "ocean") == 0){
+		if(strcmp(argc[4], "ocean") == 0){
 				printf("====\n");
 				printOcean(oceanvec, rows, cols);
 		}
-		else if(strcmp(argc[5], "time")==0){
+		else if(strcmp(argc[4], "time")==0){
 				printf("%g miliseconds\n", (finish*1000-start*1000));
 		}
-		else if (strcmp(argc[5], "all")==0) {
+		else if (strcmp(argc[4], "all")==0) {
 			printf("====\n");
 			printOcean(oceanvec, rows, cols);
 			printf("====\n");
