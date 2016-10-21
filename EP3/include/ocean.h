@@ -26,7 +26,7 @@
 	} oc;
 
 	//declaracao de funcoes
-	int* calcStep(int my_rank, int* ocean, int rows,int cols, int ranks);
+	void calcStep(int my_rank, int* ocean, int rows,int cols, int ranks, int* oceanaux);
 	void oceanSimSERIAL(int interation_limit);
 	int** getOceanFromSTDIN(int rows, int cols);
 	int getMaxNeighborValue(int* ocean,int i, int j, int rows, int cols);

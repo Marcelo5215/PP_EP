@@ -5,7 +5,7 @@
 #include "ocean.h"
 
 int main(int argv, char** argc){
-	int process_count, my_rank, *oceanvec2, rows, cols, interation_limit,
+	int process_count, my_rank, *oceanvec2, *oceanvec, rows, cols, interation_limit,
 		my_first, my_last, tam, i ,m ,l;
 	double start=0, finish=0;	
 
@@ -21,37 +21,47 @@ int main(int argv, char** argc){
 	rows = atoi(argc[1]);
 	cols = atoi(argc[2]);
 	interation_limit = atoi(argc[3]);
-	int* oceanvec = (int*)malloc(sizeof(int) * rows * cols);
-	getOceanFromFILE("mat.txt", rows, cols, oceanvec);
-
+	oceanvec = (int*)malloc(sizeof(int) * rows * cols);
+	oceanvec2 = (int*)malloc(sizeof(int) * (rows * cols)/(process_count-1));
+	if(my_rank==0)getOceanFromFILE("test.txt", rows, cols, oceanvec);
 	start = MPI_Wtime(); 
 	for(i=0; i<interation_limit; i++){
 		if (my_rank!=0){
-			if(i>0)MPI_Recv(&oceanvec[0], rows*cols, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			oceanvec2=calcStep(my_rank, oceanvec, rows, cols, process_count);
-			MPI_Send(&oceanvec2[0], rows*cols, MPI_INT, 0, 0, MPI_COMM_WORLD);
+			MPI_Recv(&oceanvec[0], rows*cols, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			calcStep(my_rank, oceanvec, rows, cols, process_count, oceanvec2);
+			if(my_rank==process_count-1){
+				MPI_Send(&oceanvec2[0], (rows*cols)-(my_rank-1)*(rows*cols)/(my_rank), MPI_INT, 0, 0, MPI_COMM_WORLD);
+			}
+			else{
+				MPI_Send(&oceanvec2[0], (rows*cols)/(process_count-1), MPI_INT, 0, 0, MPI_COMM_WORLD);
+			}
 		}
-		else{
-			if(i<interation_limit && i>0){
-				for(int j=1; j<process_count; j++){
-					MPI_Send(&oceanvec[0], rows*cols, MPI_INT, j, 0, MPI_COMM_WORLD);
+		else{	
+			if(i==0){
+				for(int k=1; k<process_count; k++){
+					MPI_Send(&oceanvec[0], rows*cols, MPI_INT, k, 0, MPI_COMM_WORLD);
 				}
 			}	
 			for(int j=1;j<process_count; j++){
 				tam=(rows*cols)/(process_count-1);
 				my_first=(tam*(j-1));
 				if(j!=process_count-1){
-					my_last=(tam*(j+1));
+					my_last=(tam*(j));
+					oceanvec2 =(int*)realloc(oceanvec2,sizeof(int)*(my_last-my_first+1));
+					MPI_Recv(&oceanvec2[0], tam, MPI_INT, j, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				}
 				else{
 					my_last=(rows*cols);
+					oceanvec2 =(int*)realloc(oceanvec2,sizeof(int)*(my_last-my_first));
+					MPI_Recv(&oceanvec2[0], (rows*cols)-(tam*(process_count-2)), MPI_INT, j, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				}
-				int *oceanvec2 =(int*)malloc(sizeof(int)*(my_last-my_first+1));
-				MPI_Recv(&oceanvec2[0], rows*cols, MPI_INT, j, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				for (int k = my_first; k < my_last; k++) {
-					m=k/cols;
-					l=k%cols;
-					oceanvec[m*cols+l] = oceanvec2[k-my_first];
+					oceanvec[k] = oceanvec2[k-my_first];
+				}
+			}
+			if(i<interation_limit-1){
+				for(int j=1; j<process_count; j++){
+					MPI_Send(&oceanvec[0], rows*cols, MPI_INT, j, 0, MPI_COMM_WORLD);
 				}
 			}
 		}
@@ -73,7 +83,9 @@ int main(int argv, char** argc){
 			printf("====\n");
 			printf("%g miliseconds\n", (finish*1000-start*1000));
 		}
-	}	
+		free(oceanvec);
+		free(oceanvec2);
+	}
 
 	MPI_Finalize();
 	return 0;

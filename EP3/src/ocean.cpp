@@ -2,8 +2,8 @@
 
 using namespace std;
 
-int* calcStep(int my_rank, int* ocean, int rows,int cols, int ranks){
-	int my_first, my_last, tam, i, j, *oceanaux=(int*)malloc(sizeof(int)*rows*cols);
+void calcStep(int my_rank, int* ocean, int rows,int cols, int ranks, int *oceanaux){
+	int my_first, my_last, tam,i,j;
 
 	tam=(rows*cols)/(ranks-1);
 	my_first=(tam*(my_rank-1));
@@ -13,13 +13,12 @@ int* calcStep(int my_rank, int* ocean, int rows,int cols, int ranks){
 	else{
 		my_last=(rows*cols)-1;
 	}
-	oceanaux=(int*)malloc(sizeof(int)*(my_last-my_first+1));
+	oceanaux=(int*)realloc(oceanaux,sizeof(int)*(my_last-my_first+1));
 	for (int k = my_first; k <= my_last; k++) {
 		i=k/cols;
 		j=k%cols;
 		oceanaux[k-my_first] = ( getMaxNeighborValue(ocean , i, j, rows, cols) - 1);
 	}
-	return &oceanaux[0];
 }
 
 
@@ -116,7 +115,6 @@ void getOceanFromFILE(char* filename, int rows, int cols, int *ocean){
 		fgetc(fp);
 	}
 
-  free(string);
 	fclose(fp);
 }
 
