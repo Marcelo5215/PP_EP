@@ -1,0 +1,106 @@
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+
+\usepackage{graphicx,url}
+
+\usepackage{amsmath}
+
+%\usepackage[brazilian]{babel}   
+\usepackage[latin1]{inputenc}  
+
+     
+\sloppy
+
+\title{Product Quantization for Nearest Neighbor Search\\ A parallel aproach}
+
+\author{Marcelo de Araújo \inst{1}, André Fernandes \inst{1} }
+
+
+\address{Departamento de Ciência da Computação - Universidade de Brasília(UNB)
+}
+
+\begin{document} 
+
+\maketitle
+     
+\begin{resumo} 
+ O artigo baseia-se na ideia proposta por \cite{pqnns:1},  onde o espaço é decomposto em vários subespaços de um produto cartesiano, produzindo vetores menores, que serao quantizados separadamente, e usados para a criação de uma lista invertida junto com uma base de dados contendo os codigos referentes a cada vetor da base, onde toda busca será feita por meio da lista invertida.
+ Também será apresentada uma proposta de paralelização no ambiente distribuído, com o foco na parte de busca.
+\end{resumo}
+
+
+\section{Introdução}
+    Dados um vetor $x$, e um conjunto de vetores $Y \subset R^n$, queremos achar o vetor $y$ do conjunto $Y$ que mais se aproxima de $x$, chamando de $NN(x)$ o vizinho mais próximo e definido como:
+    \begin{equation}\label{NNdef}
+	    NN(x) = \arg \min d(x, y) \ , \ y \in Y
+    \end{equation}
+	Onde $d(x, y)$ é a distância euclidiana entre $x$ e $y$.
+	Porém para conjuntos $Y$ grandes seria muito custoso a busca exaustiva. Por isso a estratégia adotada em [1], tenta aproximar os vetores da base $Y$ em outro conjunto de vetores, chamados centróides($c_i \in C$) aproximados com o algoritmo K-means a partir de um conjunto de treino.\\
+	Com o centróides conhecidos podemos definir formalmente como $q(.)$ a função que mapeia um vetor arbitrário $x \in R^n$ em $q(x) \in C = \{c_i \ ; \ i \in I\}$, onde I é um intervalo finito, $I = \{0, \cdots ,k-1\}$ e $c_i$ são centróídes.
+	\begin{equation}\label{Qdef}
+	    q(x) = \arg \min d(x, c_i) \ , \ c_i \in C
+	\end{equation}
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=1.1]{fig1}
+		\label{fig1centroids}
+		\caption{Centroides e Vetores}
+	\end{figure}
+	Além de aproximar os vetores $y$ da base em seus centróides mais próximos, centróides são criados a partir de subvetores, e assim vetores $y$ são divididos em partes de dimensão $d = \frac{n}{m}$ e assinalada a cada subdimensão do centróide.
+	\begin{equation}
+	\begin{split}
+		y = \{y_1, y_1 , \cdots , y_n\},\ \text{seus respectivos subvetores $u_i$}\\
+		u_1 = \{y_1, y_2, \cdots, y_d\}  , \ u_2 = \{y_{d+1}, y_{d+2}, \cdots, y_{2d}\}\\
+		u_{m}= \{y_{n-d}, y_{n-d+1}, \cdots, y_{n}\}, \ u_i \in R^{d} \qquad
+	\end{split}
+	\end{equation}
+	
+	E seus respectivos centróídes de seus subespaços:
+	\begin{equation}
+		q(y) = \{ q(u_1), q(u_2), \cdots, q(u_m)\}, \ q(u_i) \in C
+	\end{equation}
+	
+	\subsection{Lista Invertida}
+		Com a finalidade de tornar a busca mais eficiente uma estrutura de lista invertida foi utilizada
+		por \cite{pqnns:1}.\\
+		Para montar a lista são usados dois conjuntos de centróides $C_1$ e $C_2$, onde $C_1$ representa os centroides assinalados a base de treino $T$ e após conhecidos, $C_2$ é calculado e são os centróides assinalados ao resto , $r(t)$, dos vetores de treino com cada um de seus centróides.
+		
+		\begin{equation}
+			\begin{split}
+				q(t) \in C_1 \qquad \quad \\
+				r(t) = y - q(t), \ y \in T \\
+				q(r(t)) \in C_2 \qquad
+			\end{split}
+		\end{equation}
+		
+		Com os conjuntos $C_1$ e $C_2$ conhecidos, podemos montar a estrutura da lista em si, indexando os vetores de uma base $Y$ na lista, da seguinte forma:
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[scale=0.4]{indexing}
+				\label{fig2indexing}
+				\caption{Processo de indexação}
+			\end{figure}
+		
+\section{Algoritmo} \label{sec:Algoritmo}
+
+
+\section{Solução Paralela}
+
+
+\section{Sections and Paragraphs}
+
+
+\subsection{Subsections}
+
+
+\section{Figures and Captions}\label{sec:figs}
+
+
+\bibliographystyle{sbc}
+\bibliography{sbc-template}
+\cite{pqnns:1}
+
+\end{document}
