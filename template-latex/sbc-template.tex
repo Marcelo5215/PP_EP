@@ -35,6 +35,9 @@
     \begin{equation}\label{NNdef}
 	    NN(x) = \arg \min d(x, y) \ , \ y \in Y
     \end{equation}
+    \begin{equation}\label{NNdef}
+	    d(x, y) = \sqrt{\sum_{i=1}^{n}(x_i-y_i)^2}
+    \end{equation}
 	Onde $d(x, y)$ é a distância euclidiana entre $x$ e $y$.
 	Porém para conjuntos $Y$ grandes seria muito custoso a busca exaustiva. Por isso a estratégia adotada em [1], tenta aproximar os vetores da base $Y$ em outro conjunto de vetores, chamados centróides($c_i \in C$) aproximados com o algoritmo K-means a partir de um conjunto de treino.\\
 	Com o centróides conhecidos podemos definir formalmente como $q(.)$ a função que mapeia um vetor arbitrário $x \in R^n$ em $q(x) \in C = \{c_i \ ; \ i \in I\}$, onde I é um intervalo finito, $I = \{0, \cdots ,k-1\}$ e $c_i$ são centróídes.
@@ -83,6 +86,8 @@
 				\label{fig2indexing}
 				\caption{Processo de indexação}
 			\end{figure}
+		
+		Cada entrada da lista representa um centróide de $C_1$ e cada entrada da lista contida representa o centroide de $C_2$ possuindo os códigos, ou identificadores, dos vetores $y$ da base que possuem aquele centróide como o mais próximo.
 		
 \section{Algoritmo} \label{sec:Algoritmo}
 

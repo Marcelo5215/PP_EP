@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2016.4.23)  15 NOV 2016 12:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2016.4.23)  15 NOV 2016 14:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -178,7 +178,11 @@ Package: inputenc 2015/03/17 v1.2c Input encoding file
 
 (c:/texlive/2015/texmf-dist/tex/latex/base/latin1.def
 File: latin1.def 2015/03/17 v1.2c Input encoding file
-)) (./sbc-template.aux)
+)) (./sbc-template.aux
+
+LaTeX Warning: Label `NNdef' multiply defined.
+
+)
 \openout1 = `sbc-template.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
@@ -194,8 +198,7 @@ LaTeX Font Info:    ... okay on input line 23.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 23.
 LaTeX Font Info:    ... okay on input line 23.
 LaTeX Font Info:    Try loading font information for OT1+ptm on input line 23.
-
-(c:/texlive/2015/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+ (c:/texlive/2015/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 *geometry* driver: auto-detecting
@@ -301,48 +304,56 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <13> not available
 <fig1.png, id=1, 130.23656pt x 134.00063pt>
 File: fig1.png Graphic file (type png)
  <use fig1.png>
-Package pdftex.def Info: fig1.png used on input line 47.
+Package pdftex.def Info: fig1.png used on input line 50.
 (pdftex.def)             Requested size: 143.26065pt x 147.40111pt.
-LaTeX Font Info:    Try loading font information for OT1+phv on input line 49.
+LaTeX Font Info:    Try loading font information for OT1+phv on input line 52.
 
 (c:/texlive/2015/texmf-dist/tex/latex/psnfss/ot1phv.fd
 File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 49.
- [1
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 52.
 
-{c:/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./fig1.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[1
+
+{c:/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 <indexing.png, id=19, 584.93532pt x 328.97906pt>
 File: indexing.png Graphic file (type png)
  <use indexing.png>
-Package pdftex.def Info: indexing.png used on input line 82.
+Package pdftex.def Info: indexing.png used on input line 85.
 (pdftex.def)             Requested size: 233.96997pt x 131.5893pt.
 
-(./sbc-template.bbl) [2 <./indexing.png>] [3] (./sbc-template.aux) ) 
+(./sbc-template.bbl [2 <./fig1.png> <./indexing.png>]) [3] (./sbc-template.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
  3269 strings out of 493027
  44222 string characters out of 6137684
- 118363 words of memory out of 5000000
+ 119402 words of memory out of 5000000
  6750 multiletter control sequences out of 15000+600000
  21926 words of font info for 47 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  38i,20n,28p,412b,241s stack positions out of 5000i,500n,10000p,200000b,80000s
-{c:/texlive
-/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2015/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2015/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmmi8.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr12.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8
-.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/
-texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/20
-15/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb><c:/texlive/2015/texmf-dist/f
-onts/type1/urw/times/utmb8a.pfb><c:/texlive/2015/texmf-dist/fonts/type1/urw/tim
-es/utmbi8a.pfb><c:/texlive/2015/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:
-/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on sbc-template.pdf (3 pages, 168030 bytes).
+{c:/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2015/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2015/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2015/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmr12.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr8.pfb><c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+<c:/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texliv
+e/2015/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb><c:/texlive/2015/texmf-di
+st/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2015/texmf-dist/fonts/type1/urw
+/times/utmbi8a.pfb><c:/texlive/2015/texmf-dist/fonts/type1/urw/times/utmr8a.pfb
+><c:/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on sbc-template.pdf (3 pages, 176102 bytes).
 PDF statistics:
- 64 PDF objects out of 1000 (max. 8388607)
- 43 compressed objects within 1 object stream
+ 68 PDF objects out of 1000 (max. 8388607)
+ 46 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
