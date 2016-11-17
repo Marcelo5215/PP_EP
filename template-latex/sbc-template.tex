@@ -40,7 +40,7 @@
     \end{equation}
 	Onde $d(x, y)$ é a distância euclidiana entre $x$ e $y$.
 	Porém para conjuntos $Y$ grandes seria muito custoso a busca exaustiva. Por isso a estratégia adotada em [1], tenta aproximar os vetores da base $Y$ em outro conjunto de vetores, chamados centróides($c_i \in C$) aproximados com o algoritmo K-means a partir de um conjunto de treino.\\
-	Com o centróides conhecidos podemos definir formalmente como $q(.)$ a função que mapeia um vetor arbitrário $x \in R^n$ em $q(x) \in C = \{c_i \ ; \ i \in I\}$, onde I é um intervalo finito, $I = \{0, \cdots ,k-1\}$ e $c_i$ são centróídes.
+	Com os centróides conhecidos podemos definir formalmente como $q(.)$ a função que mapeia um vetor arbitrário $x \in R^n$ em $q(x) \in C = \{c_i \ ; \ i \in I\}$, onde I é um intervalo finito, $I = \{0, \cdots ,k-1\}$ e $c_i$ são centróídes.
 	\begin{equation}\label{Qdef}
 	    q(x) = \arg \min d(x, c_i) \ , \ c_i \in C
 	\end{equation}
@@ -123,9 +123,14 @@
 	 
 \section{Solução Paralela}
 
-
 \section{Resultados}
 
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.4]{porcXtempo2}
+		\label{fig4tempxproc}
+		\caption{}
+	\end{figure}
 
 \section{Conclusão}\label{sec:conc}
 
