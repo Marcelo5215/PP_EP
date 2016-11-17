@@ -123,6 +123,43 @@
 	 
 \section{Solução Paralela}
 
+A abordagem paralela adotada se baseia em uma fila de execução para sistemas distribuídos, decompondo PQNNS em quatro estágios (figura 3).
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.4]{fila}
+	\label{fila}
+	\caption{Fila de execução}
+\end{figure}
+
+Os estágios de leitura da base e de recebimento da "query" são responsáveis pela criação dos centroides e assinalam os vetores da query aos centroides correspondentes, criando a lista invertida. Enquanto os estágios de busca dos vizinhos mais próximos e de agregação encontram os vetores correspondentes na base e agregam os resultados da busca.
+
+O gerenciamento dos processos e a comunicação entre os estágios é feita pela ferramenta MPI, que rotula as mensagens baseado em seus destinos e as distribui.
+
+\subsection{Treinamento}
+
+O estágio de treinamento lê as bases de vetores e aprende os centroides dos conjuntos $C_1$ e $C_2$. Os centroides encontrados são usados para criar a lista invertida que assinala os vetores da base.
+
+Os dados criados são enviados para os próximos estágios, os centroides são enviados para o estágio de recebimento da query e para o estágio de busca. A lista invertida é enviada ao estágio de busca, no qual cada processo recebe um trecho da lista.
+
+\subsection{Recebimento de query}
+
+O estágio de recebimento da query faz a leitura dos vetores $y_i$ da query e os assinala aos centroides mais próximos no conjunto $C_1$. É responsável também pelo cálculo dos resíduos $r(y_i)$ conforme (6).
+
+Os índices e resíduos de cada vetor da query são enviados para o estágio de busca, onde cada processo recebe dados que estejam assinalados aos centroides pelos qual ele é responsável.
+
+Os dados de cada vetor da query serão enviados para os processos responsáveis por $w$ centroides. 
+
+\subsection{Busca}
+
+O estágio de busca procura os vetores mais próximos de um determinado vetor. Cada processo $S_t$ é responsável por um grupo $C_3$ de centroides que é determinado por meio de uma função de hash.
+
+Ao receber os resíduos de um vetor da query, o processo procura os $k$ vetores mais próximos assinalados pelo centroide correspondente. Os índices dos vetores mais próximos e as distâncias até o vetor da query são enviados para o estágio de agregação.
+
+\subsection{Agregação}
+
+O estágio de agregação recebe os resultados para cada vetor da query, que correspondem a $wk$ vetores mais próximos da base. Os k $vetores$ da base mais próximos são agregados e os resultados de todas as consultas são agregados.
+
 \section{Resultados}
 
 	\begin{figure}[h]
