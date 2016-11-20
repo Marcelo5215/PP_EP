@@ -31,16 +31,21 @@
 
 
 \section{Introdução}\label{sec:Intro}
+
     Dados um vetor $x$, e um conjunto de vetores $Y \subset R^n$, queremos achar o vetor $y$ do conjunto $Y$ que mais se aproxima de $x$, chamando de $NN(x)$ o vizinho mais próximo e definido como:
+    
     \begin{equation}\label{NNdef}
 	    NN(x) = \arg \min d(x, y) \ , \ y \in Y
     \end{equation}
     \begin{equation}\label{Ddef}
 	    d(x, y) = \sqrt{\sum_{i=1}^{n}(x_i-y_i)^2}
     \end{equation}
+    
 	Onde $d(x, y)$ é a distância euclidiana entre $x$ e $y$.
-	Porém para conjuntos $Y$ grandes seria muito custoso a busca exaustiva. Por isso a estratégia adotada em [1], tenta aproximar os vetores da base $Y$ em outro conjunto de vetores, chamados centróides($c_i \in C$) aproximados com o algoritmo K-means a partir de um conjunto de treino.\\
-	Com os centróides conhecidos podemos definir formalmente como $q(.)$ a função que mapeia um vetor arbitrário $x \in R^n$ em $q(x) \in C = \{c_i \ ; \ i \in I\}$, onde I é um intervalo finito, $I = \{0, \cdots ,k-1\}$ e $c_i$ são centróídes.
+	Porém para conjuntos $Y$ grandes seria muito custoso a busca exaustiva. Por isso a estratégia adotada em [1], tenta aproximar os vetores da base $Y$ em outro conjunto de vetores, chamados centroides($c_i \in C$) aproximados com o algoritmo K-means a partir de um conjunto de treino.\\
+	
+	Com os centroides conhecidos podemos definir formalmente como $q(.)$ a função que mapeia um vetor arbitrário $x \in R^n$ em $q(x) \in C = \{c_i \ ; \ i \in I\}$, onde I é um intervalo finito, $I = \{0, \cdots ,k-1\}$ e $c_i$ são centroides.
+	
 	\begin{equation}\label{Qdef}
 	    q(x) = \arg \min d(x, c_i) \ , \ c_i \in C
 	\end{equation}
@@ -49,9 +54,11 @@
 		\centering
 		\includegraphics[scale=1.1]{fig1}
 		\label{fig1centroids}
-		\caption{Centroides e Vetores}
+		\caption{Centroides e vetores.}
 	\end{figure}
-	Além de aproximar os vetores $y$ da base em seus centróides mais próximos, centróides são criados a partir de subvetores, e assim vetores $y$ são divididos em partes de dimensão $d = \frac{n}{m}$ e assinalada a cada subdimensão do centróide.
+
+	Além de aproximar os vetores $y$ da base em seus centroides mais próximos, centroides são criados a partir de subvetores, e assim vetores $y$ são divididos em partes de dimensão $d = \frac{n}{m}$ e assinalada a cada subdimensão do centroide.
+	
 	\begin{equation}\label{eq:u}
 	\begin{split}
 		y = \{y_1, y_1 , \cdots , y_n\},\ \text{seus respectivos subvetores $u_i$}\\
@@ -60,7 +67,8 @@
 	\end{split}
 	\end{equation}
 	
-	E seus respectivos centróídes de seus subespaços:
+	E seus respectivos centroides de seus subespaços:
+	
 	\begin{equation}\label{eq:qy}
 		q(y) = \{ q(u_1), q(u_2), \cdots, q(u_m)\}, \ q(u_i) \in C
 	\end{equation}
@@ -68,6 +76,7 @@
 	\subsection{Lista Invertida}
 		Com a finalidade de tornar a busca mais eficiente uma estrutura de lista invertida foi utilizada
 		por \cite{pqnns:1}.\\
+		
 		Para montar a lista são usados dois conjuntos de centróides $C_1$ e $C_2$, onde $C_1$ representa os centroides assinalados a base de treino $T$, chamados em \cite{pqnns:1} por \textit{coarse centroids}, e após conhecidos, $C_2$ é calculado e são os centróides assinalados ao resto , $r(t)$, dos vetores de treino com cada um de seus centróides.
 		
 		\begin{equation}\label{eq:ind}
@@ -83,7 +92,7 @@
 			\begin{figure}[h]
 				\centering
 				\includegraphics[scale=0.5]{indexing}
-				\caption{Processo de indexação}
+				\caption{Processo de indexação.}
 				\label{fig:fig2indexing}
 			\end{figure}
 		
@@ -91,50 +100,60 @@
 		
 \section{Algoritmo} \label{sec:Algoritmo}
 	\subsection{Aprendizagem}
+	
 	Primeiramente o algoritmo necessita aprender os centróides $c_i$ dos dois conjuntos $C_1$ e $C_2$, para sabermos a função $q(.)$, e realiza isto na parte de aprendizagem, onde a partir de uma base de treino $T$ os conjuntos são aprendidos com o algoritmo K-means.
 	
 	\subsection{Indexação}
+	
 		A figura \ref{fig:fig2indexing} representa o processo de indexação de uma base de dados $Y$, onde e feito da seguinte forma:
+		
 		\begin{itemize}
-			\item Para cada vetor $y_i \in Y$ calculamos seu centroide mais próximo $c_i \in C_1$, assim sabemos a entrada da lista principal.
-			\item Calculamos $r(y_i)$ conforme \eqref{eq:ind} e calculamos o centroide mais próximo $q(r(y_i)) = c_j \in C_2$, para cada subdimensão
+			
+			\item Para cada vetor $y_i \in Y$ calculamos seu centroide mais próximo $c_i \in C_1$, assim sabemos a entrada da lista principal;
+			
+			\item Calculamos $r(y_i)$ conforme \eqref{eq:ind} e calculamos o centroide mais próximo $q(r(y_i)) = c_j \in C_2$, para cada subdimensão;
+			
 			\item Agora que temos o código para cada $c_j \in C_2$, guardamos na entrada correspondente junto com o identificador do vetor. 
 		\end{itemize}
 
 	\subsection{Busca}
+	
 	Durante a busca, como dito na secção \ref{sec:Intro}, queremos buscar o vizinho mais próximo de um determinado vetor $x$, ou $k$ vizinhos mais próximos dele.
 	
 	\begin{itemize}
-		\item Procuramos o centroide $c_i \in C_1$ mais próximo de $x$, agora sabemos qual entrada da lista possui vetores associados ao mesmo centroide.
-		\item Calculamos o $r(x)$ e usamos para calcular a $d(r(x), c_j), \ c_j \in C_2$, para cada subdimensão.
-		\item Somamos as distâncias das subdimensões de interesse, aquelas cujos $c_j$ se encontram na entrada da listad descoberta no primeiro passo.
-		\item Com as distâncias podemos procurar as $k$ distância mínimas, gerando uma lista $L$ a de possíveis canditados da base $Y$ próximos a $x$, que são 
-		encontrados pelos seus identificadores presentes nas entradas de cada lista. 
+		
+		\item Procuramos o centroide $c_i \in C_1$ mais próximo de $x$, agora sabemos qual entrada da lista possui vetores associados ao mesmo centroide;
+		
+		\item Calculamos o $r(x)$ e usamos para calcular a $d(r(x), c_j), \ c_j \in C_2$, para cada subdimensão;
+		
+		\item Somamos as distâncias das subdimensões de interesse, aquelas cujos $c_j$ se encontram na entrada da lista descoberta no primeiro passo;
+		
+		\item Com as distâncias podemos procurar as $k$ distância mínimas, gerando uma lista $L$ a de possíveis canditados da base $Y$ próximos a $x$, que são encontrados pelos seus identificadores presentes nas entradas de cada lista. 
 	\end{itemize}
 	
 	\begin{figure}[h]
 		\centering
 		\includegraphics[scale=0.5]{search}
 		\label{fig3search}
-		\caption{Processo de Busca}
+		\caption{Processo de busca.}
 	\end{figure}
 	
 	 
 	 
 \section{Solução Paralela}
 
-A abordagem paralela adotada se baseia em uma fila de execução para sistemas distribuídos, decompondo PQNNS em quatro estágios (figura 3).
+A abordagem paralela adotada se baseia em uma fila de execução para sistemas distribuídos, decompondo PQNNS em quatro estágios (figura 4).
+
+Os estágios de leitura da base e de recebimento da "query" são responsáveis pela criação dos centroides e assinalam os vetores da query aos centroides correspondentes, criando a lista invertida. Enquanto os estágios de busca dos vizinhos mais próximos e de agregação encontram os vetores correspondentes na base e agregam os resultados da busca.
+
+O gerenciamento dos processos e a comunicação entre os estágios é feita pela ferramenta MPI, que rotula as mensagens baseado em seus destinos e as distribui.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.4]{fila}
 	\label{fila}
-	\caption{Fila de execução}
+	\caption{Fila de execução.}
 \end{figure}
-
-Os estágios de leitura da base e de recebimento da "query" são responsáveis pela criação dos centroides e assinalam os vetores da query aos centroides correspondentes, criando a lista invertida. Enquanto os estágios de busca dos vizinhos mais próximos e de agregação encontram os vetores correspondentes na base e agregam os resultados da busca.
-
-O gerenciamento dos processos e a comunicação entre os estágios é feita pela ferramenta MPI, que rotula as mensagens baseado em seus destinos e as distribui.
 
 \subsection{Treinamento}
 
@@ -148,25 +167,40 @@ O estágio de recebimento da query faz a leitura dos vetores $y_i$ da query e os 
 
 Os índices e resíduos de cada vetor da query são enviados para o estágio de busca, onde cada processo recebe dados que estejam assinalados aos centroides pelos qual ele é responsável.
 
-Os dados de cada vetor da query serão enviados para os processos responsáveis por $w$ centroides. 
+Os dados de cada vetor da query serão enviados para os processos responsáveis pelos $w$ centroides mais próximos.
 
 \subsection{Busca}
 
-O estágio de busca procura os vetores mais próximos de um determinado vetor. Cada processo $S_t$ é responsável por um grupo $C_3$ de centroides que é determinado por meio de uma função de hash.
+O estágio de busca procura os vetores mais próximos de um determinado vetor. Cada processo $S_h$ $(0 <  h \le u) $ é responsável por um conjunto $C_3$ de centroides que é determinado por meio de uma função de hash.
+
+\begin{equation}\label{eq:ind}
+\begin{split}
+c_1 \in C_1 \qquad \\
+c_l = c_1\mod u \\
+c_l \in C_3 \qquad
+\end{split}
+\end{equation}
 
 Ao receber os resíduos de um vetor da query, o processo procura os $k$ vetores mais próximos assinalados pelo centroide correspondente. Os índices dos vetores mais próximos e as distâncias até o vetor da query são enviados para o estágio de agregação.
 
 \subsection{Agregação}
 
-O estágio de agregação recebe os resultados para cada vetor da query, que correspondem a $wk$ vetores mais próximos da base. Os k $vetores$ da base mais próximos são agregados e os resultados de todas as consultas são agregados.
+O estágio de agregação recebe os resultados para cada vetor da query, que correspondem a $wk$ vetores da base mais próximos. São deterinados os $k$ vetores mais próximos à query e os resultados de todas as consultas são agregados.
 
 \section{Resultados}
 
 	\begin{figure}[h]
 		\centering
-		\includegraphics[scale=0.4]{porcXtempo2}
-		\label{fig4tempxproc}
-		\caption{}
+		\includegraphics[scale=0.4]{tempos}
+		\label{tempos}
+		\caption{Impacto da variação do número de \textit{coarse centroids} no tempo de execução.}
+	\end{figure}
+
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.4]{precision}
+		\label{precision}
+		\caption{Impacto da variação do número de \textit{coarse centroids} na performance da busca com um recall@100.}
 	\end{figure}
 
 \section{Conclusão}\label{sec:conc}
