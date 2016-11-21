@@ -168,7 +168,7 @@
 
 		O estágio de recebimento da query faz a leitura dos vetores $y_i$ da query e os assinala aos centroides mais próximos no conjunto $C_1$. É responsável também pelo cálculo dos resíduos $r(y_i)$ conforme (6).
 
-		Os índices e resíduos de cada vetor da query são enviados para o estágio de busca, onde cada processo recebe dados que estejam assinalados aos centroides pelos qual ele é responsável.
+		Os índices e resíduos de cada vetor da query são enviados para o estágio de busca, onde cada processo recebe dados que estejam assinalados aos centroides pelos quais ele é responsável.
 
 		Os dados de cada vetor da query serão enviados para os processos responsáveis pelos $w$ centroides mais próximos.
 
@@ -196,9 +196,7 @@
 	
 	Os testes foram executados em uma máquina ...
 	
-	Foram utilizadas dois conjuntos de vetores nos testes, disponibilizados por \cite{pqnns:1}. Ambos contém vetores obtidos pelo algoritmo SIFT.
-	
-	O conjunto denominado por \textit{siftsmall} contém uma base de dados menor e é consultado menos vezes que a base \textit{sift} (tabela 1).
+	Foram utilizadas dois conjuntos de vetores nos testes, disponibilizados por \cite{pqnns:1}. Ambos contém vetores obtidos pelo algoritmo SIFT. O conjunto denominado por \textit{siftsmall} contém uma base de dados menor e é consultado menos vezes que a base \textit{sift} (tabela 1).
 	
 	\begin{table}[h]
 		\centering
@@ -211,9 +209,7 @@
 		\end{tabular}
 	\end{table}
 
-	Os estágios da implementação paralela permitem o uso de vários processos para serem executados, mas nos limitamos a variar o número de processos do estágio de busca.	
-	
-	Os testes buscaram mostrar o impacto da implementação paralela no estágio de busca, observar suas limitações e buscar melhorias.
+	Os estágios da implementação paralela permitem o uso de vários processos em cada estágio, mas nos limitamos a variar o número de processos do estágio de busca. Os testes buscaram mostrar o impacto da implementação paralela no estágio de busca, observar suas limitações e buscar melhorias.
 	
 	\subsection {Impacto do número de processos no tempo de busca } 
 	
