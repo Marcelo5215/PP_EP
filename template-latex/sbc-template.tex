@@ -25,8 +25,11 @@
 \maketitle
      
 \begin{resumo} 
- O artigo baseia-se na ideia proposta por \cite{pqnns:1},  onde o espaço é decomposto em vários subespaços de um produto cartesiano, produzindo vetores menores, que serão aproximados separadamente, e usados para a criação de uma lista invertida junto com uma base de dados contendo os códigos referentes a cada vetor da base, onde toda busca será feita por meio da lista invertida.
- Também será apresentada uma proposta de paralelização no ambiente distribuído, com o foco na parte de busca.
+	 
+	 O artigo baseia-se na ideia proposta por \cite{pqnns:1},  onde o espaço é decomposto em vários subespaços de um produto cartesiano, produzindo vetores menores, que serão aproximados separadamente, e usados para a criação de uma lista invertida junto com uma base de dados contendo os códigos referentes a cada vetor da base, onde toda busca será feita por meio da lista invertida.
+	 
+	 Também será apresentada uma proposta de paralelização no ambiente distribuído, com o foco na parte de busca.
+
 \end{resumo}
 
 
@@ -37,6 +40,7 @@
     \begin{equation}\label{NNdef}
 	    NN(x) = \arg \min d(x, y) \ , \ y \in Y
     \end{equation}
+   
     \begin{equation}\label{Ddef}
 	    d(x, y) = \sqrt{\sum_{i=1}^{n}(x_i-y_i)^2}
     \end{equation}
@@ -89,19 +93,20 @@
 		
 		Com os conjuntos $C_1$ e $C_2$ conhecidos, podemos montar a estrutura da lista em si, indexando os vetores de uma base $Y$ na lista, da seguinte forma:
 		
-			\begin{figure}[h]
-				\centering
-				\includegraphics[scale=0.5]{indexing}
-				\caption{Processo de indexação.}
-				\label{fig:fig2indexing}
-			\end{figure}
+		\begin{figure}[h]
+			\centering
+			\includegraphics[scale=0.5]{indexing}
+			\caption{Processo de indexação.}
+			\label{fig:fig2indexing}
+		\end{figure}
 		
 		Cada entrada da lista representa um centróide de $C_1$ e cada entrada da lista contida representa o centroide de $C_2$ possuindo os identificadores dos vetores $y$ da base que possuem aquele centróide como o mais próximo.\\
 		
 \section{Algoritmo} \label{sec:Algoritmo}
+	
 	\subsection{Aprendizagem}
 	
-	Primeiramente o algoritmo necessita aprender os centróides $c_i$ dos dois conjuntos $C_1$ e $C_2$, para sabermos a função $q(.)$, e realiza isto na parte de aprendizagem, onde a partir de uma base de treino $T$ os conjuntos são aprendidos com o algoritmo K-means.
+		Primeiramente o algoritmo necessita aprender os centróides $c_i$ dos dois conjuntos $C_1$ e $C_2$, para sabermos a função $q(.)$, e realiza isto na parte de aprendizagem, onde a partir de uma base de treino $T$ os conjuntos são aprendidos com o algoritmo K-means.
 	
 	\subsection{Indexação}
 	
@@ -118,107 +123,179 @@
 
 	\subsection{Busca}
 	
-	Durante a busca, como dito na secção \ref{sec:Intro}, queremos buscar o vizinho mais próximo de um determinado vetor $x$, ou $k$ vizinhos mais próximos dele.
+		Durante a busca, como dito na secção \ref{sec:Intro}, queremos buscar o vizinho mais próximo de um determinado vetor $x$, ou $k$ vizinhos mais próximos dele.
 	
-	\begin{itemize}
+		\begin{itemize}
 		
-		\item Procuramos o centroide $c_i \in C_1$ mais próximo de $x$, agora sabemos qual entrada da lista possui vetores associados ao mesmo centroide;
+			\item Procuramos o centroide $c_i \in C_1$ mais próximo de $x$, agora sabemos qual entrada da lista possui vetores associados ao mesmo centroide;
 		
-		\item Calculamos o $r(x)$ e usamos para calcular a $d(r(x), c_j), \ c_j \in C_2$, para cada subdimensão;
+			\item Calculamos o $r(x)$ e usamos para calcular a $d(r(x), c_j), \ c_j \in C_2$, para cada subdimensão;
 		
-		\item Somamos as distâncias das subdimensões de interesse, aquelas cujos $c_j$ se encontram na entrada da lista descoberta no primeiro passo;
+			\item Somamos as distâncias das subdimensões de interesse, aquelas cujos $c_j$ se encontram na entrada da lista descoberta no primeiro passo;
 		
-		\item Com as distâncias podemos procurar as $k$ distância mínimas, gerando uma lista $L$ a de possíveis canditados da base $Y$ próximos a $x$, que são encontrados pelos seus identificadores presentes nas entradas de cada lista. 
-	\end{itemize}
+			\item Com as distâncias podemos procurar as $k$ distância mínimas, gerando uma lista $L$ a de possíveis canditados da base $Y$ próximos a $x$, que são encontrados pelos seus identificadores presentes nas entradas de cada lista. 
+		\end{itemize}
 	
-	\begin{figure}[h]
-		\centering
-		\includegraphics[scale=0.5]{search}
-		\label{fig3search}
-		\caption{Processo de busca.}
-	\end{figure}
-	
-	 
+		\begin{figure}[h]
+			\centering
+			\includegraphics[scale=0.5]{search}
+			\label{fig3search}
+			\caption{Processo de busca.}
+		\end{figure}
 	 
 \section{Solução Paralela}
 
-A abordagem paralela adotada se baseia em uma fila de execução para sistemas distribuídos, decompondo PQNNS em quatro estágios (figura 4).
+	A abordagem paralela adotada se baseia em uma fila de execução para sistemas distribuídos, decompondo PQNNS em quatro estágios (figura 4).
 
-Os estágios de leitura da base e de recebimento da "query" são responsáveis pela criação dos centroides e assinalam os vetores da query aos centroides correspondentes, criando a lista invertida. Enquanto os estágios de busca dos vizinhos mais próximos e de agregação encontram os vetores correspondentes na base e agregam os resultados da busca.
+	Os estágios de leitura da base e de recebimento da \textit{query} são responsáveis pela criação dos centroides e assinalam os vetores da \textit{query} aos centroides correspondentes, criando a lista invertida. Enquanto os estágios de busca dos vizinhos mais próximos e de agregação encontram os vetores correspondentes na base e agregam os resultados da busca.
 
-O gerenciamento dos processos e a comunicação entre os estágios é feita pela ferramenta MPI, que rotula as mensagens baseado em seus destinos e as distribui.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.4]{fila}
-	\label{fila}
-	\caption{Fila de execução.}
-\end{figure}
-
-\subsection{Treinamento}
-
-O estágio de treinamento lê as bases de vetores e aprende os centroides dos conjuntos $C_1$ e $C_2$. Os centroides encontrados são usados para criar a lista invertida que assinala os vetores da base.
-
-Os dados criados são enviados para os próximos estágios, os centroides são enviados para o estágio de recebimento da query e para o estágio de busca. A lista invertida é enviada ao estágio de busca, no qual cada processo recebe um trecho da lista.
-
-\subsection{Recebimento de query}
-
-O estágio de recebimento da query faz a leitura dos vetores $y_i$ da query e os assinala aos centroides mais próximos no conjunto $C_1$. É responsável também pelo cálculo dos resíduos $r(y_i)$ conforme (6).
-
-Os índices e resíduos de cada vetor da query são enviados para o estágio de busca, onde cada processo recebe dados que estejam assinalados aos centroides pelos qual ele é responsável.
-
-Os dados de cada vetor da query serão enviados para os processos responsáveis pelos $w$ centroides mais próximos.
-
-\subsection{Busca}
-
-O estágio de busca procura os vetores mais próximos de um determinado vetor. Cada processo $S_h$ $(0 <  h \le u) $ é responsável por um conjunto $C_3$ de centroides que é determinado por meio de uma função de hash.
-
-\begin{equation}\label{eq:ind}
-\begin{split}
-c_1 \in C_1 \qquad \\
-c_l = c_1\mod u \\
-c_l \in C_3 \qquad
-\end{split}
-\end{equation}
-
-Ao receber os resíduos de um vetor da query, o processo procura os $k$ vetores mais próximos assinalados pelo centroide correspondente. Os índices dos vetores mais próximos e as distâncias até o vetor da query são enviados para o estágio de agregação.
-
-\subsection{Agregação}
-
-O estágio de agregação recebe os resultados para cada vetor da query, que correspondem a $wk$ vetores da base mais próximos. São deterinados os $k$ vetores mais próximos à query e os resultados de todas as consultas são agregados.
-
-\section{Resultados}
+	O gerenciamento dos processos e a comunicação entre os estágios é feita pela ferramenta MPI, que rotula as mensagens baseado em seus destinos e as distribui.
 
 	\begin{figure}[h]
 		\centering
-		\includegraphics[scale=0.4]{smallTempoProcess}
-		\label{smallTempoProcess}
-		\caption{Impacto da variação do número de processos no tempo da busca na base siftsmall}
+		\includegraphics[scale=0.45]{fila}
+		\label{fila}
+		\caption{Fila de execução.}
 	\end{figure}
+
+	\subsection{Treinamento}
+
+		O estágio de treinamento lê as bases de vetores e aprende os centroides dos conjuntos $C_1$ e $C_2$. Os centroides encontrados são usados para criar a lista invertida que assinala os vetores da base.
+
+		Os dados criados são enviados para os próximos estágios, os centroides são enviados para o estágio de recebimento da query e para o estágio de busca. A lista invertida é enviada ao estágio de busca, no qual cada processo recebe um trecho da lista.
+
+	\subsection{Recebimento de query}
+
+		O estágio de recebimento da query faz a leitura dos vetores $y_i$ da query e os assinala aos centroides mais próximos no conjunto $C_1$. É responsável também pelo cálculo dos resíduos $r(y_i)$ conforme (6).
+
+		Os índices e resíduos de cada vetor da query são enviados para o estágio de busca, onde cada processo recebe dados que estejam assinalados aos centroides pelos qual ele é responsável.
+
+		Os dados de cada vetor da query serão enviados para os processos responsáveis pelos $w$ centroides mais próximos.
+
+	\subsection{Busca}
+
+		O estágio de busca procura os vetores mais próximos de um determinado vetor. Cada processo $S_h$ $(0 <  h \le u) $ é responsável por um conjunto $C_3$ de centroides que é determinado por meio de uma função de hash.
+
+		\begin{equation}\label{eq:ind}
+			\begin{split}
+			c_1 \in C_1 \qquad \\
+			c_l = c_1\mod u \\
+			c_l \in C_3 \qquad
+			\end{split}
+		\end{equation}
+
+		Ao receber os resíduos de um vetor da query, o processo procura os $k$ vetores mais próximos assinalados pelo centroide correspondente. Os índices dos vetores mais próximos e as distâncias até o vetor da query são enviados para o estágio de agregação.
+
+	\subsection{Agregação}
+
+		O estágio de agregação recebe os resultados para cada vetor da query, que correspondem a $wk$ vetores da base mais próximos. São deterinados os $k$ vetores mais próximos à query e os resultados de todas as consultas são agregados.
+
+\section{Resultados experimentais}
+
+	Vamos avaliar os resultados da implementação paralela proposta na seção anterior.
 	
-	\begin{figure}[h]
+	Os testes foram executados em uma máquina ...
+	
+	Foram utilizadas dois conjuntos de vetores nos testes, disponibilizados por \cite{pqnns:1}. Ambos contém vetores obtidos pelo algoritmo SIFT.
+	
+	O conjunto denominado por \textit{siftsmall} contém uma base de dados menor e é consultado menos vezes que a base \textit{sift} (tabela 1).
+	
+	\begin{table}[h]
 		\centering
-		\includegraphics[scale=0.4]{tempoProcess}
-		\label{tempoProcess}
-		\caption{Impacto da variação do número de processos no tempo da busca na base sift}
-	\end{figure}
+		\caption{Conjuntos de vetores}
+		\label{Conjuntos de vetores}
+		\begin{tabular}{ccccc}
+			Conjunto & \multicolumn{1}{l}{Dimensão} & \multicolumn{1}{l}{Tamanho da base} & \multicolumn{1}{l}{Tamanho da query} & \multicolumn{1}{l}{Tamanho da base de treinamento} \\
+			Siftsmall           & 128                          & 10000                                     & 100                                        & 25000                                            \\
+			Sift                & 128                          & 1000000                                   & 10000                                      & 100000                                          
+		\end{tabular}
+	\end{table}
 
-	\begin{figure}[h]
-		\centering
-		\includegraphics[scale=0.4]{tempos}
-		\label{tempos}
-		\caption{Impacto da variação do número de \textit{coarse centroids} no tempo de execução.}
-	\end{figure}
+	Os estágios da implementação paralela permitem o uso de vários processos para serem executados, mas nos limitamos a variar o número de processos do estágio de busca.	
+	
+	Os testes buscaram mostrar o impacto da implementação paralela no estágio de busca, observar suas limitações e buscar melhorias.
+	
+	\subsection {Impacto do número de processos no tempo de busca } 
+	
+		O primeiro teste foi feito usando a base \textit{siftsmall} e foram criados entre 4 e 8 processos, sendo que três dos processos são dedicados ao treinamento da base, ao recebimento da \textit{query} e ao agregador e os processos restantes são dedicados à busca.
+		
+		\begin{table}[h]
+			\centering
+			\caption{Tempo de execução e \textit{speedup} - \textit{siftsmall}}
+			\label{my-label}
+			\begin{tabular}{ccc}
+				Processos & Tempo (ms) & Speedup \\
+				4         & 33.017     & 1       \\
+				5         & 16.763     & 1.969   \\
+				6         & 12.909     & 2.558   \\
+				7         & 11.343     & 2.911   \\
+				8         & 8.946      & 3,691  
+			\end{tabular}
+		\end{table}
+	
+		A tabela 2 mostra um ganho em desempenho com o aumento do número de processos. Considerando que a execução com 4 processos é executada sequencialmente, percebe-se um \textit{speedup} de 3,691 na execução com 8 processos, ou seja, não se assemelha ao esperado (5).
+		
+		A partir do gráfico da figura 5 pode-se notar que a variação no desempenho não é linear e isso em parte se deve à base pequena utilizada, justificando os testes com a base maior.
 
-	\begin{figure}[h]
-		\centering
-		\includegraphics[scale=0.4]{precision}
-		\label{precision}
-		\caption{Impacto da variação do número de \textit{coarse centroids} na performance da busca com um recall@100.}
-	\end{figure}
+		\begin{figure}[h]
+			\centering
+			\includegraphics[scale=0.45]{smallTempoProcess}
+			\label{smallTempoProcess}
+			\caption{Impacto da variação do número de processos no tempo da busca na base \textit{siftsmall}}
+		\end{figure}
+
+		Os mesmos testes foram executados com o conjunto de dados \textit{sift}, que contém uma base maior. A tabela 3 e o gráfico da imagem 6 mostram um comportamento mais linear no desempenho do algoritmo, apesar de não atingir um \textit{speedup} linear.
+		
+		\begin{table}[h]
+			\centering
+			\caption{Tempo de execução e \textit{speedup} - \text{sift}}
+			\label{my-label}
+			\begin{tabular}{ccc}
+				Processos & Tempo (s) & Speedup \\
+				4         & 12.505    & 1       \\
+				5         & 6.583     & 1.899   \\
+				6         & 4.705     & 2.657   \\
+				7         & 3.706     & 3.374   \\
+				8         & 2.965     & 4.217  
+			\end{tabular}
+		\end{table}			
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[scale=0.55]{tempoProcess}
+			\label{tempoProcess}
+			\caption{Impacto da variação do número de processos no tempo da busca na base \textit{sift}}
+		\end{figure}
+	
+	\subsection{Variação no número de centroides}
+	
+		A variação no número de processos mostra um ganho considerável em desempenho e justifica o uso de uma execução do algoritmo em um ambiente distribuído. No entanto foram encontradas algumas limitações na aplicação do algoritmo, todos os testes foram executados com 256 \textit{coarse centroids}, o que limita o uso da aplicação a 256 processos de busca.
+		
+		Para expandir o uso do algoritmo, foram feitos testes no conjunto de vetores \textit{sift}, variou-se o número de \textit{coarse centroids}, de centroides e o de \textit{coarse centroids} a serem visitados em cada busca.
+	
+		\begin{figure}[h]
+			\centering
+			\includegraphics[scale=0.385]{precision}
+			\label{precision}
+			\caption{Impacto da variação do número de \textit{coarse centroids} na performance da busca com um recall@100.}
+		\end{figure}
+
+		O gráfico da imagem 7 a perda de precisão na busca com o aumento do número de \textit{coarse centroids} e mostra também que a variação no número de centroides não afeta tanto.
+	
+		Uma solução para reduzir a perda de precisão é o aumento no campo de busca, ao se dobrar o número de \textit{coarse centroids} a serem usados na busca ($w$) o desempenho com o quádruplo de \textit{coarse centroids} ainda é ligeiramente melhor, compensando totalmente a perda causada pelo aumento.
+
+		\begin{figure}[h]
+			\centering
+			\includegraphics[scale=0.385]{tempos}
+			\label{tempos}
+			\caption{Impacto da variação do número de \textit{coarse centroids} no tempo de execução.}
+		\end{figure}
+
+		O gráfico da imagem 8 mostra que o aumento de $w$ impacta linearmente no tempo de execução. 
 
 \section{Conclusão}\label{sec:conc}
 
+	Nós apresentamos uma abordagem paralela do algoritmo \textit{Product Quantization for Neares Neighbor Search} para sistemas distribuídos. A proposta atinge bons \textit{speedups} na busca. Apesar das limitações que podem ser geradas pelo número de \textit{coarse centroids}, elas podem ser resolvidas com o ajuste de alguns parâmetros e assim seu uso ainda é justificado. A  nossa abordagem replica os resultados atingidos no algoritmo sequencial e é uma solução escalável.
 
 \bibliographystyle{sbc}
 \bibliography{sbc-template}
